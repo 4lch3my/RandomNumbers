@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Number Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex flex-col items-center justify-start pt-8">
+    <h1 class="text-3xl font-bold mb-8 text-purple-400">Random Number & Dice Generator</h1>
+
+    <div class="bg-gray-800 rounded-lg shadow-md p-6 mb-8 w-full max-w-md">
+        <h2 class="text-xl font-semibold mb-4 text-white">Generate Random Number</h2>
+        <div class="flex space-x-4 mb-4">
+            <input type="number" id="min-number" placeholder="Min" class="bg-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-400 w-1/2" value="1">
+            <input type="number" id="max-number" placeholder="Max" class="bg-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-400 w-1/2" value="100">
+        </div>
+        <button id="generate-number" class="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold rounded-md py-3 px-6 w-full transition duration-300 ease-in-out shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-opacity-75">
+            Generate Number
+        </button>
+        <p id="number-output" class="mt-4 text-2xl font-semibold text-center text-green-400"></p>
+    </div>
+
+    <div class="bg-gray-800 rounded-lg shadow-md p-6 mb-8 w-full max-w-md">
+        <h2 class="text-xl font-semibold mb-4 text-white">Generate Dice Roll</h2>
+        <div class="flex space-x-4 mb-4 items-center">
+            <label for="dice-count" class="text-white font-medium">Number of Dice:</label>
+            <input type="number" id="dice-count" placeholder="1" class="bg-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-400 w-1/2" value="1" min="1">
+        </div>
+        <button id="generate-dice" class="bg-gradient-to-r from-blue-500 to-teal-500 hover:from-blue-600 hover:to-teal-600 text-white font-semibold rounded-md py-3 px-6 w-full transition duration-300 ease-in-out shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75">
+            Roll Dice
+        </button>
+        <div id="dice-output" class="mt-4 text-2xl font-semibold text-center text-yellow-400 flex flex-wrap justify-center gap-4"></div>
+    </div>
+
+    <script>
+        const minNumberInput = document.getElementById('min-number');
+        const maxNumberInput = document.getElementById('max-number');
+        const generateNumberButton = document.getElementById('generate-number');
+        const numberOutput = document.getElementById('number-output');
+
+        const diceCountInput = document.getElementById('dice-count');
+        const generateDiceButton = document.getElementById('generate-dice');
+        const diceOutput = document.getElementById('dice-output');
+
+        function getRandomNumber(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        generateNumberButton.addEventListener('click', () => {
+            const min = parseInt(minNumberInput.value);
+            const max = parseInt(maxNumberInput.value);
+
+            if (isNaN(min) || isNaN(max) || min > max) {
+                numberOutput.textContent = "Invalid input. Please enter valid numbers.";
+                numberOutput.classList.remove('text-green-400');
+                numberOutput.classList.add('text-red-400');
+                return;
+            }
+
+            const randomNumber = getRandomNumber(min, max);
+            numberOutput.textContent = randomNumber;
+            numberOutput.classList.remove('text-red-400');
+            numberOutput.classList.add('text-green-400');
+        });
+
+        generateDiceButton.addEventListener('click', () => {
+            const diceCount = parseInt(diceCountInput.value);
+
+            if (isNaN(diceCount) || diceCount < 1) {
+                diceOutput.textContent = "Invalid input. Please enter a valid number of dice (1 or more).";
+                diceOutput.classList.remove('text-yellow-400');
+                diceOutput.classList.add('text-red-400');
+                return;
+            }
+
+            diceOutput.innerHTML = '';
+            diceOutput.classList.remove('text-red-400');
+            diceOutput.classList.add('text-yellow-400');
+            for (let i = 0; i < diceCount; i++) {
+                const roll = getRandomNumber(1, 6);
+                const diceDiv = document.createElement('div');
+                diceDiv.textContent = roll;
+                diceDiv.classList.add('dice');
+                diceDiv.classList.add('text-3xl');
+                diceOutput.appendChild(diceDiv);
+            }
+        });
+    </script>
+</body>
+</html>
